@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from "node:url";
 
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import child_process from "child_process";
 import fs from "fs";
 import path from "path";
