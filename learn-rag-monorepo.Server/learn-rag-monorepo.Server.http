@@ -1,0 +1,6 @@
+@learn_rag_monorepo.Server_HostAddress = http://localhost:5186
+
+GET {{learn_rag_monorepo.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
