@@ -13,7 +13,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>learn_rag_monorepo.Server</RootNamespace>
-    <SpaRoot>..\learn-rag-monorepo.client</SpaRoot>
+    <SpaRoot>..\..\frontend\learn-rag-monorepo.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
   </PropertyGroup>

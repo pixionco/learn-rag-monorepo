@@ -11,7 +11,7 @@ import svgr from "vite-plugin-svgr";
 const baseFolder =
   env.APPDATA !== undefined && env.APPDATA !== ""
     ? `${env.APPDATA}/ASP.NET/https`
-    : `${env.HOME}/.aspnet/https`;
+        : `${env.HOME}/.aspnet/https`;
 
 const certificateName = "learn-rag-monorepo.client";
 const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
@@ -35,6 +35,10 @@ const target = env.ASPNETCORE_HTTPS_PORT
   : env.ASPNETCORE_URLS
     ? env.ASPNETCORE_URLS.split(";")[0]
     : "https://localhost:7189";
+
+
+console.log("https", env.ASPNETCORE_HTTPS_PORT)
+console.log("urls", env.ASPNETCORE_URLS)
 
 // https://vitejs.dev/config/
 export default defineConfig({
