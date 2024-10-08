@@ -3,8 +3,6 @@ using Pixion.LearnRag.Core.Clients;
 
 namespace Pixion.LearnRag.UseCases.PromptRenderFilters;
 
-#pragma warning disable SKEXP0001
-
 public class PromptRenderFilter(ITokenizingClient tokenizingClient) : IPromptRenderFilter
 {
     public int InputTokenCount { get; private set; }

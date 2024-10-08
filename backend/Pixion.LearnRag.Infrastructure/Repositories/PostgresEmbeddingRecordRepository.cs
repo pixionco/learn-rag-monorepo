@@ -9,8 +9,6 @@ using Pixion.LearnRag.Infrastructure.Configs;
 
 namespace Pixion.LearnRag.Infrastructure.Repositories;
 
-#pragma warning disable SKEXP0032
-
 public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
 {
     private readonly string _embeddingRecordTableName;
@@ -49,7 +47,7 @@ public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
                                )
                                SELECT bulk.*
                                FROM (
-                                 SELECT * FROM unnest(@t1, @t2, @t3, @t4, @t5, @t6, @t7, @t8, @t9) AS
+                                 SELECT * FROM unnest(@t1, @t2, @t3, @t4, @t5, @t7, @t8, @t9) AS
                                    t(id, text, embedding, operations, document_id, operation_tree_id, index, parent_index, parent_chunk)
                                ) AS bulk
                                """;
@@ -82,12 +80,6 @@ public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
                 "@t5",
                 metadataList
                     .Select(x => x.DocumentId)
-                    .ToArray()
-            );
-            cmd.Parameters.AddWithValue(
-                "@t6",
-                metadataList
-                    .Select(x => x.OperationTreeId)
                     .ToArray()
             );
             cmd.Parameters.AddWithValue(
@@ -154,7 +146,6 @@ public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
                 var metadata = new Metadata
                 {
                     DocumentId = dataReader.GetGuid(dataReader.GetOrdinal("document_id")),
-                    OperationTreeId = dataReader.GetGuid(dataReader.GetOrdinal("operation_tree_id")),
                     Index = dataReader.GetInt32(dataReader.GetOrdinal("index")),
                     ParentIndex = isParentIndexNull ? null : dataReader.GetInt32(parentIndexOrdinal),
                     ParentChunk = isParentChunkNull ? null : dataReader.GetString(parentChunkOrdinal)
@@ -209,7 +200,6 @@ public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
                 var metadata = new Metadata
                 {
                     DocumentId = dataReader.GetGuid(dataReader.GetOrdinal("document_id")),
-                    OperationTreeId = dataReader.GetGuid(dataReader.GetOrdinal("operation_tree_id")),
                     Index = dataReader.GetInt32(dataReader.GetOrdinal("index")),
                     ParentIndex = dataReader.GetInt32(dataReader.GetOrdinal("parent_index")),
                     ParentChunk = dataReader.GetString(dataReader.GetOrdinal("parent_chunk"))
@@ -252,7 +242,6 @@ public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
                 var metadata = new Metadata
                 {
                     DocumentId = dataReader.GetGuid(dataReader.GetOrdinal("document_id")),
-                    OperationTreeId = dataReader.GetGuid(dataReader.GetOrdinal("operation_tree_id")),
                     Index = dataReader.GetInt32(dataReader.GetOrdinal("index")),
                     ParentIndex = null,
                     ParentChunk = null
@@ -298,7 +287,6 @@ public class PostgresEmbeddingRecordRepository : IEmbeddingRecordRepository
                 var metadata = new Metadata
                 {
                     DocumentId = dataReader.GetGuid(dataReader.GetOrdinal("document_id")),
-                    OperationTreeId = dataReader.GetGuid(dataReader.GetOrdinal("operation_tree_id")),
                     Index = dataReader.GetInt32(dataReader.GetOrdinal("index")),
                     ParentIndex = null,
                     ParentChunk = null
