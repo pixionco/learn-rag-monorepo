@@ -1,5 +1,5 @@
 {
-  "name": "learn-rag-monorepo.client",
+  "name": "learn-rag.client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
