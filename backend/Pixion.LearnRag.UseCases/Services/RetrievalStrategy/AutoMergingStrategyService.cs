@@ -27,7 +27,7 @@ public class AutoMergingStrategyService(
             throw (embeddingResult as EmbeddingGenerationErrorResult)!.Exception;
 
         var childResults =
-            (await autoMergingStrategyRepository.SearchAsync(successResult.Embedding, limit))
+            (await autoMergingStrategyRepository.SearchLeafChunksAsync(successResult.Embedding, limit))
             .ToList();
 
         if (childResults.Count == 0) return childResults;
@@ -52,7 +52,7 @@ public class AutoMergingStrategyService(
                 .Where(group => group.Count() >= n)
                 .Select(group => group.Key!.Value);
 
-            var parentSearchResults = await autoMergingStrategyRepository.GetParentsAsync(
+            var parentSearchResults = await autoMergingStrategyRepository.GetParentChunksAsync(
                 documentIdChildResults.Key,
                 parentIndexes
             );

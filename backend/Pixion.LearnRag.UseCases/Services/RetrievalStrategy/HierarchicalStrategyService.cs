@@ -27,7 +27,7 @@ public class HierarchicalStrategyService(
             throw (embeddingResult as EmbeddingGenerationErrorResult)!.Exception;
 
         var parentResults =
-            (await hierarchicalStrategyRepository.SearchFirstLevelAsync(successResult.Embedding, limit))
+            (await hierarchicalStrategyRepository.SearchRootChunksAsync(successResult.Embedding, limit))
             .ToList();
 
         var results = new List<SearchResult>();

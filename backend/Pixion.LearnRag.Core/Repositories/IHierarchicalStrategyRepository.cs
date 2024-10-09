@@ -12,7 +12,7 @@ public interface IHierarchicalStrategyRepository : IStrategyRepository
         CancellationToken cancellationToken = default
     );
 
-    public Task<IEnumerable<SearchResult>> SearchFirstLevelAsync(
+    public Task<IEnumerable<SearchResult>> SearchRootChunksAsync(
         ReadOnlyMemory<float> queryEmbedding,
         int limit,
         CancellationToken cancellationToken = default

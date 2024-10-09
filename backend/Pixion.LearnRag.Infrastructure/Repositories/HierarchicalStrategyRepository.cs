@@ -50,7 +50,7 @@ public class HierarchicalStrategyRepository(IOptions<PostgresVectorRepositoryCon
         return searchResults;
     }
 
-    public async Task<IEnumerable<SearchResult>> SearchFirstLevelAsync(ReadOnlyMemory<float> queryEmbedding,
+    public async Task<IEnumerable<SearchResult>> SearchRootChunksAsync(ReadOnlyMemory<float> queryEmbedding,
         int limit,
         CancellationToken cancellationToken)
     {
