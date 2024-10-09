@@ -17,16 +17,5 @@ public class PostgresVectorRepositoryConfigValidator : AbstractValidator<Postgre
         RuleFor(x => x.VectorSize)
             .NotEmpty()
             .WithMessage($"{nameof(PostgresVectorRepositoryConfig.VectorSize)} is required!");
-
-        RuleFor(x => x.VectorSize)
-            .NotEmpty()
-            .WithMessage($"{nameof(PostgresVectorRepositoryConfig.EmbeddingRecordTableName)} is required!");
-
-        RuleFor(x => x.AiModelFailedMessageTableName)
-            .NotEmpty()
-            .WithMessage($"{nameof(PostgresVectorRepositoryConfig.AiModelFailedMessageTableName)} is required!");
-        RuleFor(x => x.OperationPathTableName)
-            .NotEmpty()
-            .WithMessage($"{nameof(PostgresVectorRepositoryConfig.OperationPathTableName)} is required!");
     }
 }

@@ -22,7 +22,11 @@ public static class DependencyInjection
     )
     {
         // Repositories
-        services.AddSingleton<IEmbeddingRecordRepository, PostgresEmbeddingRecordRepository>();
+        services.AddSingleton<IBasicStrategyRepository, BasicStrategyRepository>();
+        services.AddSingleton<ISentenceWindowStrategyRepository, SentenceWindowStrategyRepository>();
+        services.AddSingleton<IAutoMergingStrategyRepository, AutoMergingStrategyRepository>();
+        services.AddSingleton<IHierarchicalStrategyRepository, HierarchicalStrategyRepository>();
+        services.AddSingleton<IHypotheticalQuestionStrategyRepository, HypotheticalQuestionStrategyRepository>();
 
         // Services
         if (mockConfig.MockAiModels)
@@ -51,7 +55,7 @@ public static class DependencyInjection
             );
 
         // Postgres Seeders
-        services.AddScoped<ISeeder, PostgresEmbeddingRecordSeeder>();
+        services.AddScoped<ISeeder, StrategyTableSeeder>();
 
         // Clients
         services.AddTransient<ITokenizingClient, TokenizingClient>();

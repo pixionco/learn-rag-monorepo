@@ -4,6 +4,5 @@ public record EmbeddingRecord(
     Guid Id,
     string Text,
     ReadOnlyMemory<float> Embedding,
-    string Operations,
-    Metadata Metadata
+    string MetadataString
 );
