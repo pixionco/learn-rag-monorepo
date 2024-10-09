@@ -1,5 +1,5 @@
 ﻿using Pixion.LearnRag.Core.Clients;
-using Pixion.LearnRag.Core.Entities;
+using Pixion.LearnRag.Core.Entities.Metadata;
 using Pixion.LearnRag.Core.Enums;
 using Pixion.LearnRag.Core.Models;
 using Pixion.LearnRag.Core.Repositories;
@@ -25,6 +25,6 @@ public class HypotheticalQuestionStrategyService(
 
         var results = await hypotheticalQuestionStrategyRepository.SearchAsync(successResult.Embedding, limit);
 
-        return results.OrderBy(x => x.Metadata<BasicMetadata>().Index);
+        return results.OrderBy(x => x.Metadata<HypotheticalQuestionMetadata>().Index);
     }
 }

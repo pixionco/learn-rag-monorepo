@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Pixion.LearnRag.Core.Entities;
+using Pixion.LearnRag.Core.Entities.Metadata;
 
 namespace Pixion.LearnRag.Core.Models;
 
@@ -10,7 +10,7 @@ public record SearchResult(string Text, double? Relevance, string MetadataString
     public double? Relevance { init; get; }
     public string MetadataString { init; get; }
 
-    public T Metadata<T>() where T : BasicMetadata
+    public T Metadata<T>() where T : IMetadataBase
     {
         if (_cachedMetadata is not T) _cachedMetadata = JsonSerializer.Deserialize<T>(MetadataString);
         if (_cachedMetadata is null) throw new Exception("Invalid Metadata Deserialization");

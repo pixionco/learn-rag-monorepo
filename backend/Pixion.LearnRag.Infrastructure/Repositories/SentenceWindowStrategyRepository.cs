@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Pixion.LearnRag.Core.Entities;
 using Pixion.LearnRag.Core.Enums;
 using Pixion.LearnRag.Core.Models;
 using Pixion.LearnRag.Core.Repositories;
@@ -10,7 +9,8 @@ namespace Pixion.LearnRag.Infrastructure.Repositories;
 public class SentenceWindowStrategyRepository(IOptions<PostgresVectorRepositoryConfig> config)
     : StrategyRepository(config, Strategy.SentenceWindow.Name), ISentenceWindowStrategyRepository
 {
-    public async Task<IEnumerable<SearchResult>> GetNearbyChunksAsync(Guid documentId, int index, int range, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<SearchResult>> GetNearbyChunksAsync(Guid documentId, int index, int range,
+        CancellationToken cancellationToken = default)
     {
         var searchResults = new List<SearchResult>();
         var connection = await Npgsql.OpenConnectionAsync(cancellationToken);
@@ -31,10 +31,7 @@ public class SentenceWindowStrategyRepository(IOptions<PostgresVectorRepositoryC
 
             await using var dataReader = await cmd.ExecuteReaderAsync(cancellationToken);
 
-            while (await dataReader.ReadAsync(cancellationToken))
-            {
-                searchResults.Add(this.ReadSearchResult(dataReader));
-            }
+            while (await dataReader.ReadAsync(cancellationToken)) searchResults.Add(ReadSearchResult(dataReader));
         }
 
         return searchResults;

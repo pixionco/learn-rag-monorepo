@@ -22,31 +22,61 @@ public class AzureOpenAiEmbeddingClient(IOptions<AzureOpenAiEmbeddingConfig> con
         config.Value.ApiKey
     );
 
-    public async Task<EmbeddingGenerationResult> GenerateEmbeddingAsync(string text)
+    public async Task<Optional<IList<ReadOnlyMemory<float>>>> GenerateEmbeddingsAsync(IList<string> texts)
     {
         return await Policy
-            .HandleResult<EmbeddingGenerationResult>(
-                result => result is EmbeddingGenerationErrorResult { StatusCode: HttpStatusCode.TooManyRequests }
+            .HandleResult<Optional<IList<ReadOnlyMemory<float>>>>(
+                result => result.Exception is HttpOperationException { StatusCode: HttpStatusCode.TooManyRequests }
+            )
+            .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+            .ExecuteAsync(async () => await GenerateEmbeddingsHelperAsync(texts));
+    }
+
+    public async Task<Optional<ReadOnlyMemory<float>>> GenerateEmbeddingAsync(string text)
+    {
+        return await Policy
+            .HandleResult<Optional<ReadOnlyMemory<float>>>(
+                result => result.Exception is HttpOperationException { StatusCode: HttpStatusCode.TooManyRequests }
             )
             .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
             .ExecuteAsync(async () => await GenerateEmbeddingHelperAsync(text));
     }
 
-    private async Task<EmbeddingGenerationResult> GenerateEmbeddingHelperAsync(string text)
+
+    // TODO: add error control, but in a more normal way
+    private async Task<Optional<IList<ReadOnlyMemory<float>>>> GenerateEmbeddingsHelperAsync(IList<string> texts)
+    {
+        try
+        {
+            var embeddings = await _embeddingService.GenerateEmbeddingsAsync(texts);
+
+            return new Optional<IList<ReadOnlyMemory<float>>>(embeddings);
+        }
+        catch (HttpOperationException ex)
+        {
+            return new Optional<IList<ReadOnlyMemory<float>>>(ex);
+        }
+        catch (Exception ex)
+        {
+            return new Optional<IList<ReadOnlyMemory<float>>>(ex);
+        }
+    }
+
+    private async Task<Optional<ReadOnlyMemory<float>>> GenerateEmbeddingHelperAsync(string text)
     {
         try
         {
             var embedding = await _embeddingService.GenerateEmbeddingAsync(text);
 
-            return new EmbeddingGenerationSuccessResult(embedding);
+            return new Optional<ReadOnlyMemory<float>>(embedding);
         }
         catch (HttpOperationException ex)
         {
-            return new EmbeddingGenerationErrorResult(ex, ex.StatusCode);
+            return new Optional<ReadOnlyMemory<float>>(ex);
         }
         catch (Exception ex)
         {
-            return new EmbeddingGenerationErrorResult(ex, null);
+            return new Optional<ReadOnlyMemory<float>>(ex);
         }
     }
 }

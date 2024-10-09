@@ -4,5 +4,6 @@ namespace Pixion.LearnRag.Core.Clients;
 
 public interface IEmbeddingClient
 {
-    public Task<EmbeddingGenerationResult> GenerateEmbeddingAsync(string text);
+    public Task<Optional<ReadOnlyMemory<float>>> GenerateEmbeddingAsync(string text);
+    public Task<Optional<IList<ReadOnlyMemory<float>>>> GenerateEmbeddingsAsync(IList<string> text);
 }

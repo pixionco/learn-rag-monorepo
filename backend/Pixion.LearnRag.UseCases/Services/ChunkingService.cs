@@ -4,14 +4,12 @@ using Pixion.LearnRag.Core.Services;
 
 namespace Pixion.LearnRag.UseCases.Services;
 
-#pragma warning disable SKEXP0050
-#pragma warning disable SKEXP0055
 public class ChunkingService(ITokenizingClient tokenizingClient) : IChunkingService
 {
     public IEnumerable<string> ChunkText(
         string text,
         int size,
-        int overlap
+        int overlap = 0
     )
     {
         return TextChunker.SplitPlainTextParagraphs(

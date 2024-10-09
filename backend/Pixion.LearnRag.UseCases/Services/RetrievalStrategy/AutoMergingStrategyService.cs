@@ -1,5 +1,5 @@
 ﻿using Pixion.LearnRag.Core.Clients;
-using Pixion.LearnRag.Core.Entities;
+using Pixion.LearnRag.Core.Entities.Metadata;
 using Pixion.LearnRag.Core.Enums;
 using Pixion.LearnRag.Core.Models;
 using Pixion.LearnRag.Core.Repositories;
@@ -37,18 +37,18 @@ public class AutoMergingStrategyService(
         var allSearchResults = new List<SearchResult>();
 
         foreach (var documentIdChildResults in childResults.GroupBy(
-                     el => el.Metadata<HierarchicalMetadata>().DocumentId))
+                     el => el.Metadata<AutoMergingMetadata>().DocumentId))
         {
             var childResultsToNotMerge = documentIdChildResults
-                .GroupBy(el => el.Metadata<HierarchicalMetadata>().ParentIndex)
+                .GroupBy(el => el.Metadata<AutoMergingMetadata>().ParentIndex)
                 .Where(group => group.Count() < n)
                 .SelectMany(group => group)
-                .OrderBy(childResult => childResult.Metadata<HierarchicalMetadata>().Index);
+                .OrderBy(childResult => childResult.Metadata<AutoMergingMetadata>().Index);
 
             allSearchResults.AddRange(childResultsToNotMerge);
 
             var parentIndexes = documentIdChildResults
-                .GroupBy(el => el.Metadata<HierarchicalMetadata>().ParentIndex)
+                .GroupBy(el => el.Metadata<AutoMergingMetadata>().ParentIndex)
                 .Where(group => group.Count() >= n)
                 .Select(group => group.Key!.Value);
 
@@ -64,12 +64,12 @@ public class AutoMergingStrategyService(
                 x => new
                 {
                     SearchResult = x,
-                    EffectiveParentIndex = x.Metadata<HierarchicalMetadata>().ParentIndex ??
-                                           x.Metadata<HierarchicalMetadata>().Index
+                    EffectiveParentIndex = x.Metadata<AutoMergingMetadata>().ParentIndex ??
+                                           x.Metadata<AutoMergingMetadata>().Index
                 }
             )
             .OrderBy(x => x.EffectiveParentIndex)
-            .ThenBy(x => x.SearchResult.Metadata<HierarchicalMetadata>().Index)
+            .ThenBy(x => x.SearchResult.Metadata<AutoMergingMetadata>().Index)
             .Select(x => x.SearchResult);
     }
 }
